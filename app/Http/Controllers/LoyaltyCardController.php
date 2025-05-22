@@ -15,13 +15,11 @@ class LoyaltyCardController extends Controller
         return response()->json($cards);
     }
 
-    public function store(Request $request, $clientId)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'user_id' => 'required|exists:users,id',
-            'service_date' => 'required|date',
-            'validated' => 'boolean',
         ]);
 
         $card = LoyaltyCard::create($data);
@@ -29,22 +27,43 @@ class LoyaltyCardController extends Controller
         return response()->json($card, 201);
     }
 
-    public function validateCard($id)
+    public function validate_visit($id)
     {
         $card = LoyaltyCard::findOrFail($id);
-        $card->validated = true;
+        $card->increment('current_visits');
         $card->save();
+
+        if ($card->current_visits % $card->total_visits_required === 0) {
+            $card->increment('rewards_claimed');
+            $card->save();
+        }
 
         return response()->json($card);
     }
 
-    public function show($clientId)
+    public function claim_reward($id)
     {
-        $client = Client::where('id', $clientId)
-            ->where('owner_id', 1)
-            ->with('loyaltyCard.visits')
-            ->firstOrFail();
+        $card = LoyaltyCard::findOrFail($id);
 
-        return response()->json($client->loyaltyCard);
+        if ($card->rewards_claimed > 0) {
+            $card->decrement('rewards_claimed');
+            $card->save();
+        }
+
+        return response()->json($card);
+    }
+
+    public function show($id)
+    {
+        $loyalty_card = LoyaltyCard::findOrFail($id);
+
+        return response()->json([
+            'id' => $loyalty_card->id,
+            'current_visits' => $loyalty_card->current_visits,
+            'total_visits_required' => $loyalty_card->total_visits_required,
+            'rewards_claimed' => $loyalty_card->rewards_claimed,
+            'rewards_to_claim' => $loyalty_card->rewards_to_claim,
+            'client_name' => $loyalty_card->client->name,
+        ]);
     }
 }

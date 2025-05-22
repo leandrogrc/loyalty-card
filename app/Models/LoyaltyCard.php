@@ -12,15 +12,22 @@ class LoyaltyCard extends Model
         'user_id',
         'service_date',
         'validated',
+        'current_visits',
+        'total_visits_required'
+    ];
+
+    protected $casts = [
+        'validated' => 'boolean',
+        'service_date' => 'date'
     ];
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

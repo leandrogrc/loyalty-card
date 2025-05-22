@@ -17,9 +17,9 @@ class ClientController extends Controller
     {
 
         $data = $request->validate([
-            'name' => ['required', 'string'],
-            'phone' => ['nullable', 'string'],
-            'email' => ['nullable', 'email'],
+            'name' => 'required|string',
+            'phone' => 'nullable|string',
+            'email' => 'nullable|email',
         ]);
 
         $data['owner_id'] = 1;

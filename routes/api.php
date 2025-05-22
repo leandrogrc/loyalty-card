@@ -8,36 +8,38 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\AuthController;
 
-## User Routes
-Route::get('/user', [UserController::class, 'index']);
-Route::get('/user/{id}', [UserController::class, 'show']);
-Route::post('/user/create', [UserController::class, 'store']);
-
 ## Auth Routes
-Route::post('/login', [AuthController::class, 'login']);
+Route::prefix('auth')->controller(AuthController::class)->group(function () {
+    Route::post('/login', 'login');
+});
+Route::prefix('auth')->middleware('auth:api')->controller(AuthController::class)->group(function () {
+    Route::post('/logout', 'logout');
+    Route::post('/refresh', 'refresh');
+    Route::get('/me', 'me');
+});
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/me', [AuthController::class, 'me']);
+## User Routes
+Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'store');
+    Route::put('/{id}/update', 'update');
+    Route::delete('/{id}/delete', 'destroy');
 });
 
 ## Clients Routes ##
+Route::prefix('client')->controller(ClientController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/create', 'store');
+    Route::put('/{id}/update', 'update');
+    Route::delete('/{id}/delete', 'destroy');
+});
 
-// listar Clientes
-Route::get('/client', [ClientController::class, 'index']);
-// criar Cliente
-Route::post('/client/create', [ClientController::class, 'store']);
-// deletar Cliente
-Route::delete('/client/{id}/delete', [ClientController::class, 'destroy']);
-// atualizar Cliente
-Route::put('/client/{id}/update', [ClientController::class, 'update']);
 ## Loyalty Cards Routes ##
-// listar atendimentos
-Route::get('/loyalty-cards', [LoyaltyCardController::class, 'index']);
-// Criar atendimento
-Route::post('/loyalty-cards', [LoyaltyCardController::class, 'store']);
-// Validar atendimento
-Route::put('/loyalty-cards/{id}/validate', [LoyaltyCardController::class, 'validateCard']);
-Route::get('/clients/{id}/loyalty-card', [LoyaltyCardController::class, 'show']);
-Route::post('/loyalty-cards/{id}/visits', [VisitController::class, 'store']);
+Route::prefix('loyalty-cards')->controller(LoyaltyCardController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'store');
+    Route::put('/{id}/validate-visit', 'validate_visit');
+    Route::put('/{id}/claim-reward', 'claim_reward');
+});
