@@ -19,7 +19,7 @@ class LoyaltyCardController extends Controller
     {
         $data = $request->validate([
             'client_id' => 'required|exists:clients,id',
-            'user_id' => 'required|exists:users,id',
+            'establishment_id' => 'required|exists:establishments,id',
         ]);
 
         $card = LoyaltyCard::create($data);
@@ -45,8 +45,9 @@ class LoyaltyCardController extends Controller
     {
         $card = LoyaltyCard::findOrFail($id);
 
-        if ($card->rewards_claimed > 0) {
+        if ($card->rewards_to_claim > 0) {
             $card->decrement('rewards_to_claim');
+            $card->increment('rewards_claimed');
             $card->save();
         }
 

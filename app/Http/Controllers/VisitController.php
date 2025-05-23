@@ -20,7 +20,7 @@ class VisitController extends Controller
         $data = $request->validate([
             'service_date' => 'required|date',
             'client_id' => 'required|exists:clients,id',
-            'user_id' => 'required|exists:users,id',
+            'establishment_id' => 'required|exists:establishments,id',
             'loyalty_card_id' => 'required|exists:loyalty_cards,id',
         ]);
 
@@ -39,7 +39,7 @@ class VisitController extends Controller
 
     public function index()
     {
-        $visits = Visit::all();
+        $visits = Visit::all()->sort();
 
         return response()->json($visits);
     }

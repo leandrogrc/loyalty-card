@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Visit extends Model
 {
-    protected $fillable = ['client_id', 'user_id', 'service_date', 'loyalty_card_id'];
+    protected $fillable = ['client_id', 'establishment_id', 'service_date', 'loyalty_card_id'];
 
     public function client()
     {
-        return $this->belongsTo(LoyaltyCard::class, 'client_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
-    public function user()
+    public function establishment()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Establishment::class, 'establishment_id');
     }
 
     public function loyalty_card()

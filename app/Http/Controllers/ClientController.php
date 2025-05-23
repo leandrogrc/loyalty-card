@@ -9,7 +9,13 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $client = Client::with('user')->get();
+        $client = Client::with('loyalty_cards')->get();
+        return response()->json($client);
+    }
+
+    public function show($id)
+    {
+        $client = Client::with('loyalty_cards')->findOrFail($id);
         return response()->json($client);
     }
 
@@ -42,7 +48,7 @@ class ClientController extends Controller
         return response()->json($client);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $client = Client::findOrFail($id);
         $client->delete();

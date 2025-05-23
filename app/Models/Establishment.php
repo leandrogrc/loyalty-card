@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Establishment extends Model
 {
     protected $fillable = [
-        'owner_id',
         'establishment_name',
-        'address'
+        'owner_id',
+        'address',
+        'number',
+        'complement',
+        'cep',
+        'city',
+        'state',
+        'country',
     ];
 
     public function owner()

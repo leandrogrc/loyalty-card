@@ -7,6 +7,7 @@ use App\Http\Controllers\LoyaltyCardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisitController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EstablishmentController;
 
 ## Auth Routes
 Route::prefix('auth')->controller(AuthController::class)->group(function () {
@@ -28,8 +29,9 @@ Route::prefix('user')->controller(UserController::class)->group(function () {
 });
 
 ## Clients Routes ##
-Route::prefix('client')->controller(ClientController::class)->group(function () {
+Route::prefix('clients')->controller(ClientController::class)->group(function () {
     Route::get('/', 'index');
+    Route::get('/{id}', 'show');
     Route::post('/create', 'store');
     Route::put('/{id}/update', 'update');
     Route::delete('/{id}/delete', 'destroy');
@@ -48,4 +50,12 @@ Route::prefix('loyalty-cards')->controller(LoyaltyCardController::class)->group(
 Route::prefix('visits')->controller(VisitController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/create', 'store');
+});
+
+## Establishment Routes ##
+Route::prefix('establishments')->controller(EstablishmentController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+    Route::post('/create', 'store');
+    Route::delete('/{id}/delete', 'destroy');
 });

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('establishment_id')->constrained('establishments')->onDelete('cascade');
             $table->foreignId('loyalty_card_id')->constrained('loyalty_cards')->onDelete('cascade');
             $table->date('service_date');
             $table->timestamps();

@@ -28,6 +28,16 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('123456'),
             ]));
         }
+
+        // Criar estabelecimentos
+        $establishments = collect();
+        foreach (range(1, 5) as $i) {
+            $establishments->push(Establishment::create([
+                'establishment_name' => 'Establishment ' . $i,
+                'owner_id' => rand(1, 2),
+            ]));
+        }
+
         // Criar 5 clientes e associar ao primeiro user
         $clients = collect();
         for ($i = 0; $i < 5; $i++) {
@@ -41,14 +51,14 @@ class DatabaseSeeder extends Seeder
         $cards = collect();
         foreach ($clients as $client) {
             $cards->push(LoyaltyCard::create([
-                'user_id' => $users->random()->id,
                 'client_id' => $client->id,
+                'establishment_id' => $establishments->random()->id,
                 'paid_visits' => 0,
-                'total_visits_required' => 9,
+                'total_visits_required' => 4,
                 'rewards_claimed' => 0,
-                'signed_by' => rand(1, 2),
             ]));
         }
+
 
         // Criar 20 visitas aleatórias
         $visit_controller = new VisitController();
@@ -56,21 +66,11 @@ class DatabaseSeeder extends Seeder
             $random_num = rand(1, 5);
             $request = new Request([
                 'service_date' => now()->subDays(rand(1, 100))->toDateString(),
-                'loyalty_card_id' => $random_num,
-                'user_id' => rand(1, 2),
+                'loyalty_card_id' => $establishments->random()->id,
+                'establishment_id' => rand(1, 2),
                 'client_id' => $random_num,
             ]);
             $visit_controller->store($request);
-        }
-
-
-        // Criar estabelecimentos
-        $establishments = collect();
-        foreach (range(1, 5) as $i) {
-            $establishments->push(Establishment::create([
-                'establishment_name' => 'Establishment ' . $i,
-                'owner_id' => rand(1, 2),
-            ]));
         }
     }
 }

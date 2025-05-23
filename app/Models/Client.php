@@ -18,7 +18,7 @@ class Client extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function loyaltyCards()
+    public function loyalty_cards()
     {
         return $this->hasMany(LoyaltyCard::class);
     }
