@@ -10,9 +10,7 @@ class LoyaltyCard extends Model
     protected $fillable = [
         'client_id',
         'user_id',
-        'service_date',
-        'validated',
-        'current_visits',
+        'paid_visits',
         'total_visits_required'
     ];
 

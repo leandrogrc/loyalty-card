@@ -43,3 +43,9 @@ Route::prefix('loyalty-cards')->controller(LoyaltyCardController::class)->group(
     Route::put('/{id}/validate-visit', 'validate_visit');
     Route::put('/{id}/claim-reward', 'claim_reward');
 });
+
+## Visit Routes ##
+Route::prefix('visits')->controller(VisitController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/create', 'store');
+});

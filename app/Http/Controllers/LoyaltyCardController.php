@@ -30,11 +30,11 @@ class LoyaltyCardController extends Controller
     public function validate_visit($id)
     {
         $card = LoyaltyCard::findOrFail($id);
-        $card->increment('current_visits');
+        $card->increment('paid_visits');
         $card->save();
 
         if ($card->current_visits % $card->total_visits_required === 0) {
-            $card->increment('rewards_claimed');
+            $card->increment('rewards_to_claim');
             $card->save();
         }
 
@@ -46,7 +46,7 @@ class LoyaltyCardController extends Controller
         $card = LoyaltyCard::findOrFail($id);
 
         if ($card->rewards_claimed > 0) {
-            $card->decrement('rewards_claimed');
+            $card->decrement('rewards_to_claim');
             $card->save();
         }
 
@@ -59,7 +59,7 @@ class LoyaltyCardController extends Controller
 
         return response()->json([
             'id' => $loyalty_card->id,
-            'current_visits' => $loyalty_card->current_visits,
+            'paid_visits' => $loyalty_card->paid_visits,
             'total_visits_required' => $loyalty_card->total_visits_required,
             'rewards_claimed' => $loyalty_card->rewards_claimed,
             'rewards_to_claim' => $loyalty_card->rewards_to_claim,

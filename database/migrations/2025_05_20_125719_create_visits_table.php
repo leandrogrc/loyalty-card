@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('loyalty_card_id')->constrained('loyalty_cards')->onDelete('cascade');
             $table->date('service_date');
             $table->timestamps();
         });

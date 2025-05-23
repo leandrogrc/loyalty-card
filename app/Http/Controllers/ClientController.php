@@ -22,8 +22,6 @@ class ClientController extends Controller
             'email' => 'nullable|email',
         ]);
 
-        $data['owner_id'] = 1;
-
         $client = Client::create($data);
 
         return response()->json($client, 201);

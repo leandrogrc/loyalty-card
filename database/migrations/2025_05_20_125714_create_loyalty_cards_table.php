@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->integer('current_visits')->default(0);
+            $table->integer('paid_visits')->default(0);
             $table->integer('total_visits_required')->default(10);
             $table->integer('rewards_to_claim')->default(0);
             $table->integer('rewards_claimed')->default(0);

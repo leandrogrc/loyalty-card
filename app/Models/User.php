@@ -64,4 +64,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(LoyaltyCard::class);
     }
+
+    public function establishment()
+    {
+        return $this->hasMany(Establishment::class);
+    }
 }

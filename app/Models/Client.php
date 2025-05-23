@@ -10,12 +10,12 @@ class Client extends Model
         'name',
         'phone',
         'email',
-        'owner_id'
+        'user_id'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function loyaltyCards()
