@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Establishment;
+use Illuminate\Support\Facades\Auth;
 
 class EstablishmentController extends Controller
 {
     public function index()
     {
         $establishments = Establishment::all();
+        return response()->json($establishments, 200);
+    }
+
+    public function establishments_by_user()
+    {
+        $establishments = Establishment::where('owner_id', Auth::id())->get();
 
         return response()->json($establishments);
     }
@@ -18,7 +25,6 @@ class EstablishmentController extends Controller
     {
         $data = $request->validate([
             'establishment_name' => 'string|required',
-            'owner_id' => 'required|exists:users,id',
             'address' => 'sometimes|string',
             'number' => 'sometimes|integer',
             'complement' => 'sometimes|string',
@@ -28,6 +34,8 @@ class EstablishmentController extends Controller
             'country' => 'sometimes|string',
         ]);
 
+        $data['owner_id'] = Auth::id();
+
         $establishment = Establishment::create($data);
 
         return response()->json($establishment, 201);
@@ -36,8 +44,7 @@ class EstablishmentController extends Controller
     public function show($id)
     {
         $establishment = Establishment::with('owner')->findOrFail($id);
-
-        return response()->json($establishment);
+        return response()->json($establishment, 200);
     }
 
     public function destroy($id)

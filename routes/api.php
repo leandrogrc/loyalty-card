@@ -20,7 +20,7 @@ Route::prefix('auth')->middleware('auth:api')->controller(AuthController::class)
 });
 
 ## User Routes
-Route::prefix('user')->controller(UserController::class)->group(function () {
+Route::prefix('users')->controller(UserController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/create', 'store');
@@ -29,7 +29,7 @@ Route::prefix('user')->controller(UserController::class)->group(function () {
 });
 
 ## Clients Routes ##
-Route::prefix('clients')->controller(ClientController::class)->group(function () {
+Route::prefix('clients')->middleware('auth:api')->controller(ClientController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/create', 'store');
@@ -38,7 +38,7 @@ Route::prefix('clients')->controller(ClientController::class)->group(function ()
 });
 
 ## Loyalty Cards Routes ##
-Route::prefix('loyalty-cards')->controller(LoyaltyCardController::class)->group(function () {
+Route::prefix('loyalty-cards')->middleware('auth:api')->controller(LoyaltyCardController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::post('/create', 'store');
@@ -47,14 +47,15 @@ Route::prefix('loyalty-cards')->controller(LoyaltyCardController::class)->group(
 });
 
 ## Visit Routes ##
-Route::prefix('visits')->controller(VisitController::class)->group(function () {
+Route::prefix('visits')->middleware('auth:api')->controller(VisitController::class)->group(function () {
     Route::get('/', 'index');
     Route::post('/create', 'store');
 });
 
 ## Establishment Routes ##
-Route::prefix('establishments')->controller(EstablishmentController::class)->group(function () {
-    Route::get('/', 'index');
+Route::prefix('establishments')->middleware('auth:api')->controller(EstablishmentController::class)->group(function () {
+    //Route::get('/', 'index');
+    Route::get('/', 'establishments_by_user');
     Route::get('/{id}', 'show');
     Route::post('/create', 'store');
     Route::delete('/{id}/delete', 'destroy');

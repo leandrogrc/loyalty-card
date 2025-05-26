@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Client;
+use App\Models\Establishment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,9 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //$user = User::with('clients')->get();
-        $clients = Client::where('owner_id', 1)->get();
-        return response()->json($clients);
+        $users = User::with('establishments')->get();
+        return response()->json($users);
     }
 
     /**
@@ -52,7 +51,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('establishments')->findOrFail($id);
         return response()->json($user);
     }
 
