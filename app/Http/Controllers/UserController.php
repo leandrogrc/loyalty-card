@@ -57,19 +57,7 @@ class UserController extends Controller
 
             $user = User::create($data);
 
-            // Gera o token JWT
-            $token = JWTAuth::fromUser($user);
-
-            // Define o cookie HTTP-only
-            $cookie = cookie('token', $token, 60 * 24); // 1 dia
-
-            return response()->json($user, 201)->withCookie($cookie);
-        } catch (ValidationException $validationException) {
-            // Captura erros de validação e retorna JSON adequado
-            return response()->json([
-                'message' => 'Erro de validação',
-                'errors' => $validationException->errors(),
-            ], 422);
+            return response()->json($user, 201);
         } catch (\Exception $err) {
             return response()->json([
                 'error' => 'Erro ao criar usuário',
