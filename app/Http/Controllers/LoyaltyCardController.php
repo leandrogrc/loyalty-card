@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Client;
+use App\Models\User;
 use App\Models\LoyaltyCard;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoyaltyCardController extends Controller
 {
@@ -12,7 +13,15 @@ class LoyaltyCardController extends Controller
     public function index()
     {
         $cards = LoyaltyCard::with('client', 'user')->get();
-        return response()->json($cards);
+        return response()->json($cards, 200);
+    }
+
+    public function loyalty_card_by_user()
+    {
+
+        $users = User::with('establishments.loyalty_cards')->where('id', Auth::id())->get();
+
+        return response()->json($users, 200);
     }
 
     public function store(Request $request)
@@ -20,6 +29,7 @@ class LoyaltyCardController extends Controller
         $data = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'establishment_id' => 'required|exists:establishments,id',
+            'total_visits_required' => 'required|integer|min:1',
         ]);
 
         $card = LoyaltyCard::create($data);
@@ -38,7 +48,7 @@ class LoyaltyCardController extends Controller
             $card->save();
         }
 
-        return response()->json($card);
+        return response()->json($card, 200);
     }
 
     public function claim_reward($id)
@@ -51,7 +61,7 @@ class LoyaltyCardController extends Controller
             $card->save();
         }
 
-        return response()->json($card);
+        return response()->json($card, 200);
     }
 
     public function show($id)
@@ -65,6 +75,6 @@ class LoyaltyCardController extends Controller
             'rewards_claimed' => $loyalty_card->rewards_claimed,
             'rewards_to_claim' => $loyalty_card->rewards_to_claim,
             'client_name' => $loyalty_card->client->name,
-        ]);
+        ], 200);
     }
 }

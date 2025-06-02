@@ -22,4 +22,9 @@ class Establishment extends Model
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }
+
+    public function loyalty_cards()
+    {
+        return $this->hasMany(LoyaltyCard::class);
+    }
 }

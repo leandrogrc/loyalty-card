@@ -38,7 +38,10 @@ class EstablishmentController extends Controller
 
         $establishment = Establishment::create($data);
 
-        return response()->json($establishment, 201);
+        return response()->json([
+            'message' => 'Estabelecimento criado com sucesso',
+            $establishment
+        ], 201);
     }
 
     public function show($id)
@@ -52,5 +55,27 @@ class EstablishmentController extends Controller
         $establishment = Establishment::findOrFail($id);
         $establishment->delete();
         return response()->json(['Mensagem' => 'Estabelecimento deletado com sucesso!']);
+    }
+
+    public function update($id, Request $request)
+    {
+        $establishment = Establishment::where('id', $id)
+            ->where('owner_id', Auth::id())
+            ->firstOrFail();
+
+        $data = $request->validate([
+            'establishment_name' => 'sometimes|string',
+            'address' => 'sometimes|string',
+            'number' => 'sometimes|integer',
+            'complement' => 'sometimes|string',
+            'cep' => 'sometimes|string',
+            'city' => 'sometimes|string',
+            'state' => 'sometimes|string',
+            'country' => 'sometimes|string',
+        ]);
+
+        $establishment->update($data);
+
+        return response()->json($establishment);
     }
 }

@@ -10,13 +10,13 @@ class ClientController extends Controller
     public function index()
     {
         $client = Client::with('loyalty_cards')->get();
-        return response()->json($client);
+        return response()->json($client, 200);
     }
 
     public function show($id)
     {
         $client = Client::with('loyalty_cards')->findOrFail($id);
-        return response()->json($client);
+        return response()->json($client, 200);
     }
 
     public function store(Request $request)
@@ -40,12 +40,12 @@ class ClientController extends Controller
         $data = $request->validate([
             'name' => 'sometimes|string',
             'phone' => 'sometimes|string',
-            'email' => 'sometimes|email|unique:users,email' . $id,
+            'email' => 'sometimes|email|unique:users,email',
         ]);
 
         $client->update($data);
 
-        return response()->json($client);
+        return response()->json($client, 200);
     }
 
     public function destroy($id)
@@ -53,6 +53,6 @@ class ClientController extends Controller
         $client = Client::findOrFail($id);
         $client->delete();
 
-        return response()->json(['message' => 'Cliente deletado com sucesso']);
+        return response()->json(['message' => 'Cliente deletado com sucesso'], 200);
     }
 }

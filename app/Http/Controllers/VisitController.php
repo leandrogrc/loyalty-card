@@ -10,12 +10,6 @@ class VisitController extends Controller
 {
     public function store(Request $request)
     {
-        //$card = LoyaltyCard::with('client')->findOrFail($cardId);
-
-        // if ($card->client->owner_id !== auth('api')->id()) {
-        //     abort(403, 'Não autorizado');
-        // }
-
 
         $data = $request->validate([
             'service_date' => 'required|date',
@@ -41,6 +35,6 @@ class VisitController extends Controller
     {
         $visits = Visit::all()->sort();
 
-        return response()->json($visits);
+        return response()->json($visits, 200);
     }
 }

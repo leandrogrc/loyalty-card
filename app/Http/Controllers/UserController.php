@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Establishment;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -15,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('establishments')->get();
-        return response()->json($users);
+        return response()->json($users, 200);
     }
 
     /**
@@ -31,19 +33,49 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'confirmed', 'string', 'min:6'],
-        ]);
+        try {
 
-        $data['password'] = Hash::make($data['password']);
+            $messages = [
+                'name.required' => 'O campo nome é obrigatório.',
+                'name.string' => 'O campo nome deve ser uma string.',
+                'email.required' => 'O campo e-mail é obrigatório.',
+                'email.email' => 'Informe um e-mail válido.',
+                'email.unique' => 'Este e-mail já está cadastrado.',
+                'password.required' => 'O campo senha é obrigatório.',
+                'password.confirmed' => 'A confirmação da senha não confere.',
+                'password.min' => 'A senha deve ter no mínimo 6 caracteres.',
+            ];
 
-        $user = User::create($data);
+            $data = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|confirmed|string|min:6',
+            ], $messages);
 
-        auth('api')->login($user);
+            $data['password'] = Hash::make($data['password']);
+            $data['email_verified_at'] = now();
 
-        return response()->json($user, 201);
+            $user = User::create($data);
+
+            // Gera o token JWT
+            $token = JWTAuth::fromUser($user);
+
+            // Define o cookie HTTP-only
+            $cookie = cookie('token', $token, 60 * 24); // 1 dia
+
+            return response()->json($user, 201)->withCookie($cookie);
+        } catch (ValidationException $validationException) {
+            // Captura erros de validação e retorna JSON adequado
+            return response()->json([
+                'message' => 'Erro de validação',
+                'errors' => $validationException->errors(),
+            ], 422);
+        } catch (\Exception $err) {
+            return response()->json([
+                'error' => 'Erro ao criar usuário',
+                'message' => $err->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -52,7 +84,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::with('establishments')->findOrFail($id);
-        return response()->json($user);
+        return response()->json($user, 200);
     }
 
     /**
@@ -82,7 +114,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return response()->json($user);
+        return response()->json($user, 200);
     }
 
     /**
@@ -93,6 +125,6 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
 
-        return response()->json(['message' => 'Usuário deletado com sucesso']);
+        return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
     }
 }

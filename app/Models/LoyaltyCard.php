@@ -11,7 +11,8 @@ class LoyaltyCard extends Model
         'client_id',
         'user_id',
         'paid_visits',
-        'total_visits_required'
+        'establishment_id',
+        'total_visits_required',
     ];
 
     protected $casts = [
