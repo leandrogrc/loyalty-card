@@ -13,6 +13,8 @@ class LoyaltyCard extends Model
         'paid_visits',
         'establishment_id',
         'total_visits_required',
+        'rewards_to_claim',
+        'rewards_claimed'
     ];
 
     protected $casts = [

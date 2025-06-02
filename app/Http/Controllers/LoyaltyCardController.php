@@ -30,6 +30,9 @@ class LoyaltyCardController extends Controller
             'client_id' => 'required|exists:clients,id',
             'establishment_id' => 'required|exists:establishments,id',
             'total_visits_required' => 'required|integer|min:1',
+            'paid_visits' => 'integer|sometimes',
+            'rewards_to_claim' => 'integer|sometimes',
+            'rewards_claimed' => 'integer|sometimes'
         ]);
 
         $card = LoyaltyCard::create($data);
