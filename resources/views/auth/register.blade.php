@@ -12,7 +12,7 @@
                     Crie sua conta
                 </h2>
             </div>
-            <form class="space-y-6" method="POST" action="{{ route('register') }}">
+            <form class="space-y-6" method="POST" action="{{ url('/auth/register') }}">
                 @csrf
 
                 <!-- Campo de Nome -->

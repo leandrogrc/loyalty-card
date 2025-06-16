@@ -85,7 +85,7 @@ class UserController extends Controller
 
         User::create($user);
 
-        return redirect('login');
+        return redirect('login')->with('success', 'Conta criada! Agora você pode fazer login.');
     }
 
     /**
