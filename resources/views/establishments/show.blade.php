@@ -25,18 +25,17 @@
                     Voltar para lista
                 </a>
             </div>
-            <div class="flex space-x-3">
-                <a href="{{ route('establishments.edit', $establishment->id) }}" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                    Editar
-                </a>
-            </div>
+
         </div>
 
         <!-- Card principal -->
         <div class="bg-white shadow rounded-lg overflow-hidden">
             <!-- Cabeçalho do card -->
-            <div class="px-6 py-4 border-b border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between">
                 <h1 class="text-2xl font-bold text-gray-800">{{ $establishment->establishment_name }}</h1>
+                <a href="{{ route('establishments.edit', $establishment->id) }}" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    Editar
+                </a>
             </div>
 
             <!-- Corpo do card -->
