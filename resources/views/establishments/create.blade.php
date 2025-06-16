@@ -114,10 +114,34 @@
                         <select id="state" name="state"
                             class="w-full px-4 py-2 border {{ $errors->has('state') ? 'border-red-500' : 'border-gray-300' }} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Selecione</option>
+                            <option value="">Selecione um estado</option>
                             <option value="AC" {{ old('state') == 'AC' ? 'selected' : '' }}>Acre</option>
                             <option value="AL" {{ old('state') == 'AL' ? 'selected' : '' }}>Alagoas</option>
-                            <!-- Adicione todos os estados -->
+                            <option value="AP" {{ old('state') == 'AP' ? 'selected' : '' }}>Amapá</option>
+                            <option value="AM" {{ old('state') == 'AM' ? 'selected' : '' }}>Amazonas</option>
+                            <option value="BA" {{ old('state') == 'BA' ? 'selected' : '' }}>Bahia</option>
+                            <option value="CE" {{ old('state') == 'CE' ? 'selected' : '' }}>Ceará</option>
+                            <option value="DF" {{ old('state') == 'DF' ? 'selected' : '' }}>Distrito Federal</option>
+                            <option value="ES" {{ old('state') == 'ES' ? 'selected' : '' }}>Espírito Santo</option>
+                            <option value="GO" {{ old('state') == 'GO' ? 'selected' : '' }}>Goiás</option>
+                            <option value="MA" {{ old('state') == 'MA' ? 'selected' : '' }}>Maranhão</option>
+                            <option value="MT" {{ old('state') == 'MT' ? 'selected' : '' }}>Mato Grosso</option>
+                            <option value="MS" {{ old('state') == 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
+                            <option value="MG" {{ old('state') == 'MG' ? 'selected' : '' }}>Minas Gerais</option>
+                            <option value="PA" {{ old('state') == 'PA' ? 'selected' : '' }}>Pará</option>
+                            <option value="PB" {{ old('state') == 'PB' ? 'selected' : '' }}>Paraíba</option>
+                            <option value="PR" {{ old('state') == 'PR' ? 'selected' : '' }}>Paraná</option>
+                            <option value="PE" {{ old('state') == 'PE' ? 'selected' : '' }}>Pernambuco</option>
+                            <option value="PI" {{ old('state') == 'PI' ? 'selected' : '' }}>Piauí</option>
+                            <option value="RJ" {{ old('state') == 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
+                            <option value="RN" {{ old('state') == 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
+                            <option value="RS" {{ old('state') == 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
+                            <option value="RO" {{ old('state') == 'RO' ? 'selected' : '' }}>Rondônia</option>
+                            <option value="RR" {{ old('state') == 'RR' ? 'selected' : '' }}>Roraima</option>
+                            <option value="SC" {{ old('state') == 'SC' ? 'selected' : '' }}>Santa Catarina</option>
                             <option value="SP" {{ old('state') == 'SP' ? 'selected' : '' }}>São Paulo</option>
+                            <option value="SE" {{ old('state') == 'SE' ? 'selected' : '' }}>Sergipe</option>
+                            <option value="TO" {{ old('state') == 'TO' ? 'selected' : '' }}>Tocantins</option>
                         </select>
                         @error('state')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
