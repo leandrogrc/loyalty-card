@@ -32,53 +32,17 @@
                 class="hidden md:flex space-x-6 text-gray-700 md:items-center md:static absolute top-full left-0 w-full md:w-auto bg-white md:bg-transparent md:shadow-none shadow-md md:rounded-none rounded-b-lg transition-all duration-300 max-h-0 overflow-hidden md:max-h-full"
                 id="menu">
 
-                <li><a href="{{ url('/') }}" class="block py-2 px-4 hover:text-blue-600">Home</a></li>
-                <li><a href="{{ url('/users/list') }}" class="block py-2 px-4 hover:text-blue-600">Usuários</a></li>
-                <li><a href="{{ url('/establishments/list') }}" class="block py-2 px-4 hover:text-blue-600">Estabelecimentos</a></li>
-                <!-- <li><a href="{{ url('/users/create') }}" class="block py-2 px-4 hover:text-blue-600">Criar Usuário</a></li>
-                <li><a href="{{ url('/auth/login') }}" class="block py-2 px-4 hover:text-blue-600">Login</a></li> -->
+                @auth
+                <li><a href="/dashboard" class="block py-2 px-4 hover:text-blue-600">Dashboard</a></li>
+                <li><a href="/users/me" class="block py-2 px-4 hover:text-blue-600">Perfil</a></li>
+                <li><a href="/establishments" class="block py-2 px-4 hover:text-blue-600">Estabelecimentos</a></li>
+                <li><a href="/auth/logout" class="block py-2 px-4 hover:text-blue-600">Logout</a></li>
+                @endauth
 
-                <div class="relative" id="dropdown-container">
-                    <!-- Botão do dropdown -->
-                    <button
-                        id="dropdown-button"
-                        class="py-2 px-4 hover:text-blue-600 flex items-center focus:outline-none">
-                        Menu
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-
-                    <!-- Itens do dropdown -->
-                    <div
-                        id="dropdown-menu"
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 hidden">
-                        <ul>
-                            <li><a href="{{ url('/users/create') }}" class="block py-2 px-4 hover:bg-blue-50 hover:text-blue-600">Criar Usuário</a></li>
-                            <li><a href="{{ url('/auth/login') }}" class="block py-2 px-4 hover:bg-blue-50 hover:text-blue-600">Login</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const button = document.getElementById('dropdown-button');
-                        const menu = document.getElementById('dropdown-menu');
-
-                        // Abre/fecha o dropdown ao clicar no botão
-                        button.addEventListener('click', function() {
-                            menu.classList.toggle('hidden');
-                        });
-
-                        // Fecha o dropdown ao clicar fora
-                        document.addEventListener('click', function(event) {
-                            const isClickInside = document.getElementById('dropdown-container').contains(event.target);
-                            if (!isClickInside) {
-                                menu.classList.add('hidden');
-                            }
-                        });
-                    });
-                </script>
+                @guest
+                <li><a href="/login" class="block py-2 px-4 hover:text-blue-600">Login</a></li>
+                <li><a href="/register" class="block py-2 px-4 hover:text-blue-600">Register</a></li>
+                @endguest
             </ul>
         </div>
     </nav>

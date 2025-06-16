@@ -35,12 +35,13 @@ Route::middleware('auth:api')->prefix('clients')->controller(ClientController::c
     Route::post('/create', 'store');
     Route::put('/{id}/update', 'update');
     Route::delete('/{id}/delete', 'destroy');
+    Route::get('/by-establishment', 'clients_by_establishment');
 });
 
 ## Loyalty Cards Routes ##
 Route::middleware('auth:api')->prefix('loyalty-cards')->controller(LoyaltyCardController::class)->group(function () {
     Route::get('/', 'index');
-    Route::get('/by-user', 'loyalty_card_by_user');
+    Route::get('/by-establishment', 'loyalty_card_by_establishment');
     Route::get('/{id}', 'show');
     Route::post('/create', 'store');
     Route::put('/{id}/validate-visit', 'validate_visit');

@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\TryCatch;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -23,15 +21,15 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function registerPage()
     {
-        //
+        return view('auth.register');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store1(Request $request)
     {
         try {
 
@@ -57,7 +55,7 @@ class UserController extends Controller
 
             $user = User::create($data);
 
-            return response()->json($user, 201);
+            return redirect()->route('login');
         } catch (\Exception $err) {
             return response()->json([
                 'error' => 'Erro ao criar usuário',
@@ -66,13 +64,40 @@ class UserController extends Controller
         }
     }
 
+    public function register(Request $request)
+    {
+        $messages = [
+            'name.required' => 'O campo nome é obrigatório.',
+            'name.string' => 'O campo nome deve ser uma string.',
+            'email.required' => 'O campo e-mail é obrigatório.',
+            'email.email' => 'Informe um e-mail válido.',
+            'email.unique' => 'Este e-mail já está cadastrado.',
+            'password.required' => 'O campo senha é obrigatório.',
+            'password.confirmed' => 'As senhas não coincidem.',
+            'password.min' => 'A senha deve ter no mínimo 6 caracteres.',
+        ];
+
+        $user = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed|string|min:6',
+        ], $messages);
+
+        User::create($user);
+
+        return redirect('login');
+    }
+
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        $user = User::with('establishments')->findOrFail($id);
-        return response()->json($user, 200);
+        // $user = User::with('establishments')->findOrFail($id);
+        $user = User::where(Auth::id());
+        // dd($user);
+        // return response()->json($user, 200);
+        return view('users.show');
     }
 
     /**

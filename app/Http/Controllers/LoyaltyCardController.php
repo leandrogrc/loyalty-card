@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Establishment;
 use App\Models\LoyaltyCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +16,15 @@ class LoyaltyCardController extends Controller
         return response()->json($cards, 200);
     }
 
-    public function loyalty_card_by_user()
+    public function loyalty_card_by_establishment(Request $request)
     {
+        $establishmentId = $request->query('establishment_id');
 
-        $users = User::with('establishments.loyalty_cards')->where('id', Auth::id())->get();
+        $loyaltyCards = LoyaltyCard::with('client')
+            ->where('establishment_id', $establishmentId)
+            ->get();
 
-        return response()->json($users, 200);
+        return response()->json($loyaltyCards, 200);
     }
 
     public function store(Request $request)
