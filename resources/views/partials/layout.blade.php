@@ -24,6 +24,7 @@
                         <li><a href="/dashboard" class="block py-2 px-4 hover:text-blue-600 transition-colors">Dashboard</a></li>
                         <li><a href="/users/me" class="block py-2 px-4 hover:text-blue-600 transition-colors">Perfil</a></li>
                         <li><a href="/establishments" class="block py-2 px-4 hover:text-blue-600 transition-colors">Estabelecimentos</a></li>
+                        <li><a href="/clients" class="block py-2 px-4 hover:text-blue-600 transition-colors">Clientes</a></li>
                         @endauth
                     </ul>
                 </div>

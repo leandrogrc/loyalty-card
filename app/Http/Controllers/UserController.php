@@ -112,36 +112,32 @@ class UserController extends Controller
     {
         $user = User::findOrFail(Auth::id());
 
-        // Validação inicial que sempre será executada
+        // Validação
         $validated = $request->validate([
-            'current_password' => 'required|string', // Sempre obrigatório
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|confirmed|min:8', // Nova senha (opcional)
+            'current_password' => 'required|string|current_password', // Sempre obrigatório
+            'name' => 'sometimes|string|max:255',                     // Opcional
+            'email' => 'sometimes|email|unique:users,email,' . $user->id, // Opcional e único (ignorando próprio ID)
+            'password' => 'sometimes|string|confirmed|min:6',         // Opcional
+        ], [
+            'current_password.current_password' => 'A senha atual fornecida está incorreta.'
         ]);
 
-        // Verificação da senha atual (agora obrigatória para qualquer atualização)
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['error' => 'Senha atual incorreta']);
-        }
-
-        // Remove a senha atual do array de atualização
+        // Remove current_password (não vai no banco)
         unset($validated['current_password']);
 
-        // Se uma nova senha foi fornecida, faz o hash
-        if (!empty($validated['password'])) {
+        // Se tiver senha nova, faz hash
+        if (array_key_exists('password', $validated) && $validated['password'] !== '') {
             $validated['password'] = Hash::make($validated['password']);
         } else {
-            // Remove o campo password se não foi fornecido
             unset($validated['password']);
         }
 
-        // Atualiza os dados do usuário
+        // Atualiza apenas os campos enviados
         $user->update($validated);
 
-        return redirect()->route('users.show')
-            ->with('success', 'Perfil atualizado com sucesso');
+        return back()->with('success', 'Perfil atualizado com sucesso');
     }
+
 
     /**
      * Remove the specified resource from storage.

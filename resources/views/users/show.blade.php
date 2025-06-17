@@ -86,18 +86,18 @@
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-800">Informações Pessoais</h3>
                     </div>
-                    <form action="{{ route('users.update')}}" method="POST" class="p-6">
+                    <form action="{{ route('users.update') }}" method="POST" class="p-6">
                         @csrf
                         @method('PUT')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
-                                <input type="text" id="name" name="name" value="{{ Auth::user()->name }}"
+                                <input type="text" id="name" name="name" placeholder="{{ Auth::user()->name }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                                <input type="email" id="email" name="email" value="{{ Auth::user()->email }}"
+                                <input type="email" id="email" name="email" placeholder="{{ Auth::user()->email }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             </div>
                         </div>
@@ -106,36 +106,39 @@
                             <h4 class="text-md font-medium text-gray-800 mb-4">Alterar Senha</h4>
                             <div class="space-y-4">
                                 <div>
-                                    <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Senha atual</label>
-                                    <input type="password" name="current_password" id="current_password"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                    <small id="password_req" class="hidden mt-1 text-sm text-red-600 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                        Informe sua senha atual
-                                    </small>
-                                </div>
-                                <div>
                                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Nova senha</label>
-                                    <input type="password" name="password"
+                                    <input type="password" id="new_password" name="password" placeholder="********"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirmar nova senha</label>
-                                    <input type="password" name="password_confirmation"
+                                    <input type="password" id="new_password_confirmation" name="password_confirmation" placeholder="********"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mt-8 flex justify-end">
-                            <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 mr-3">
-                                Cancelar
-                            </button>
-                            <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
-                                Salvar alterações
-                            </button>
+                        <div id="confirm">
+                            <hr class="border-t-2 border-gray-200 my-8">
+
+                            <div>
+                                <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Informe a senha atual para confirmar as alterações</label>
+                                <input type="password" name="current_password" id="current_password" placeholder="Senha atual"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <small id="password_req" class="hidden mt-1 text-sm text-red-600 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Informe sua senha atual
+                                </small>
+                            </div>
+
+                            <div class="mt-8 flex justify-end">
+                                <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                                    Salvar alterações
+                                </button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -174,9 +177,32 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+
         const form = document.querySelector('form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
         const currentPasswordInput = document.getElementById('current_password');
+        const newPasswordInput = document.getElementById('new_password');
+        const newPasswordConfirmationInput = document.getElementById('new_password_confirmation');
         const passwordReq = document.getElementById('password_req');
+        const confirm = document.getElementById('confirm');
+
+        const validateForm = () => {
+            const anyFieldsFilled = (
+                nameInput.value.trim() !== "" ||
+                emailInput.value.trim() !== "" ||
+                newPasswordInput.value.trim() !== "" ||
+                newPasswordConfirmationInput.value.trim() !== ""
+            );
+
+            confirm.classList.toggle('hidden', !anyFieldsFilled);
+        };
+
+        [nameInput, emailInput, newPasswordInput, newPasswordConfirmationInput].forEach(input => {
+            input.addEventListener('input', validateForm);
+        })
+
+        validateForm();
 
         // Validação em tempo real
         currentPasswordInput.addEventListener('input', function() {
@@ -201,6 +227,7 @@
                 currentPasswordInput.focus();
             }
         });
+
     });
 </script>
 @endsection

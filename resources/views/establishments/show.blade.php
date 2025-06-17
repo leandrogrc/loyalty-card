@@ -13,10 +13,10 @@
 </div>
 @endif
 
-<div class="min-h-screen bg-gray-50 p-6">
+<div class="min-h-screen bg-gray-50 p-4 sm:p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Cabeçalho com botão de voltar -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex justify-between items-center mb-6">
             <div>
                 <a href="{{ route('establishments.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,26 +25,28 @@
                     Voltar para lista
                 </a>
             </div>
-
         </div>
 
-        <!-- Card principal -->
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <!-- Card principal do estabelecimento -->
+        <div class="bg-white shadow rounded-lg overflow-hidden mb-8">
             <!-- Cabeçalho do card -->
-            <div class="px-6 py-4 border-b border-gray-200 flex justify-between">
-                <h1 class="text-2xl font-bold text-gray-800">{{ $establishment->establishment_name }}</h1>
-                <a href="{{ route('establishments.edit', $establishment->id) }}" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                    Editar
-                </a>
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">{{ $establishment->establishment_name }}</h1>
+                <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                    <a href="{{ route('establishments.edit', $establishment->id) }}"
+                        class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 text-center">
+                        Editar
+                    </a>
+                </div>
             </div>
 
             <!-- Corpo do card -->
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-4 sm:p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Seção de Endereço -->
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-700 mb-4">Informações de Endereço</h2>
-                        <div class="space-y-3">
+                        <h2 class="text-lg font-semibold text-gray-700 mb-3">Informações de Endereço</h2>
+                        <div class="space-y-2">
                             <div class="flex items-start">
                                 <span class="w-24 flex-shrink-0 text-sm font-medium text-gray-500">Rua:</span>
                                 <span class="text-gray-800">{{ $establishment->address ?? "Sem informação" }}</span>
@@ -62,8 +64,8 @@
 
                     <!-- Seção de Localização -->
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-700 mb-4">Localização</h2>
-                        <div class="space-y-3">
+                        <h2 class="text-lg font-semibold text-gray-700 mb-3">Localização</h2>
+                        <div class="space-y-2">
                             <div class="flex items-start">
                                 <span class="w-24 flex-shrink-0 text-sm font-medium text-gray-500">CEP:</span>
                                 <span class="text-gray-800">{{ $establishment->cep ?? "Sem informação" }}</span>
@@ -88,10 +90,11 @@
             </div>
 
             <!-- Rodapé do card -->
-            <div class="px-6 py-3 bg-gray-50 text-right text-sm text-gray-500">
+            <div class="px-4 sm:px-6 py-3 bg-gray-50 text-right text-sm text-gray-500">
                 Cadastrado em: {{ $establishment->created_at->format('d/m/Y H:i') }}
             </div>
         </div>
+
     </div>
 </div>
 @endsection
