@@ -51,8 +51,7 @@
                     </label>
                     <input type="text" id="establishment_name" name="establishment_name" required
                         class="w-full px-3 sm:px-4 py-2 border {{ $errors->has('establishment_name') ? 'border-red-500' : 'border-gray-300' }} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                        placeholder="{{ old('establishment_name', $establishment->establishment_name) }}"
-
+                        value="{{ old('establishment_name', $establishment->establishment_name) }}"
                         maxlength="255">
                     @error('establishment_name')
                     <p class="mt-1 text-xs sm:text-sm text-red-600">{{ $message }}</p>
@@ -121,10 +120,9 @@
                         @enderror
                     </div>
                     <div>
-                        <label for="state" class="block text-sm font-medium text-gray-700 mb-1">Estado (UF)</label>
+                        <label for="state" class="block text-sm font-medium text-gray-700 mb-1">Estado (UF')</label>
                         <select id="state" name="state"
                             class="w-full px-3 sm:px-4 py-2 border {{ $errors->has('state') ? 'border-red-500' : 'border-gray-300' }} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base">
-                            <option value="">Selecione</option>
                             <option value="">Selecione um estado</option>
                             <option value="AC" {{ old('state') == 'AC' ? 'selected' : '' }}>Acre</option>
                             <option value="AL" {{ old('state') == 'AL' ? 'selected' : '' }}>Alagoas</option>
@@ -188,7 +186,7 @@
                 </div>
             </form>
 
-            <!-- Formulário de Exclusão (oculto) -->
+            <!-- Formulário de Exclusão (oculto') -->
             <form id="deleteForm" action="{{ route('establishments.destroy', $establishment) }}" method="POST" class="hidden">
                 @csrf
                 @method('DELETE')
