@@ -110,32 +110,38 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $user = User::findOrFail(Auth::id());
+        $user = Auth::user();
 
-        // Validação
+        // Validação modificada
         $validated = $request->validate([
-            'current_password' => 'required|string|current_password', // Sempre obrigatório
-            'name' => 'sometimes|string|max:255',                     // Opcional
-            'email' => 'sometimes|email|unique:users,email,' . $user->id, // Opcional e único (ignorando próprio ID)
-            'password' => 'sometimes|string|confirmed|min:6',         // Opcional
+            'current_password' => 'required|string|current_password',
+            'name' => 'required|string|max:255', // Mude para required
+            'email' => 'required|email|unique:users,email,' . $user->id, // Mude para required
+            'password' => 'nullable|string|confirmed|min:6', // Mude para nullable
         ], [
             'current_password.current_password' => 'A senha atual fornecida está incorreta.'
         ]);
 
-        // Remove current_password (não vai no banco)
-        unset($validated['current_password']);
+        try {
+            // Remove campo de verificação
+            unset($validated['current_password']);
 
-        // Se tiver senha nova, faz hash
-        if (array_key_exists('password', $validated) && $validated['password'] !== '') {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
+            // Atualiza senha apenas se foi fornecida
+            if (!empty($validated['password'])) {
+                $validated['password'] = Hash::make($validated['password']);
+            } else {
+                unset($validated['password']);
+            }
+
+            // Força a atualização de todos os campos
+            $user->fill($validated)->save();
+
+            return back()->with('success', 'Perfil atualizado com sucesso');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Erro ao atualizar perfil: ' . $e->getMessage());
         }
-
-        // Atualiza apenas os campos enviados
-        $user->update($validated);
-
-        return back()->with('success', 'Perfil atualizado com sucesso');
     }
 
 

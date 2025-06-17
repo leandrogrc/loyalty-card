@@ -92,13 +92,25 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
-                                <input type="text" id="name" name="name" placeholder="{{ Auth::user()->name }}"
+                                <input type="text" id="name" name="name" placeholder="{{ Auth::user()->name }}" value="{{ Auth::user()->name }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <small id="name_req" class="hidden mt-1 text-sm text-red-600 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Informe um nome
+                                </small>
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                                <input type="email" id="email" name="email" placeholder="{{ Auth::user()->email }}"
+                                <input type="email" id="email" name="email" placeholder="{{ Auth::user()->email }}" value="{{ Auth::user()->email }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <small id="email_req" class="hidden mt-1 text-sm text-red-600 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                    Informe um email
+                                </small>
                             </div>
                         </div>
 
@@ -107,13 +119,19 @@
                             <div class="space-y-4">
                                 <div>
                                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Nova senha</label>
-                                    <input type="password" id="new_password" name="password" placeholder="********"
+                                    <input type="password" id="password" name="password" placeholder="********"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirmar nova senha</label>
-                                    <input type="password" id="new_password_confirmation" name="password_confirmation" placeholder="********"
+                                    <input type="password" id="password_confirmation" name="password_confirmation" placeholder="********"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <small id="passwords_req" class="hidden mt-1 text-sm text-red-600 flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        Confirme as senhas
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -182,32 +200,51 @@
         const nameInput = document.getElementById('name');
         const emailInput = document.getElementById('email');
         const currentPasswordInput = document.getElementById('current_password');
-        const newPasswordInput = document.getElementById('new_password');
-        const newPasswordConfirmationInput = document.getElementById('new_password_confirmation');
+        const newPasswordInput = document.getElementById('password');
+        const newPasswordConfirmationInput = document.getElementById('password_confirmation');
         const passwordReq = document.getElementById('password_req');
+        const passwordsReq = document.getElementById('passwords_req');
+        const nameReq = document.getElementById('name_req');
+        const emailReq = document.getElementById('email_req');
         const confirm = document.getElementById('confirm');
 
-        const validateForm = () => {
-            const anyFieldsFilled = (
-                nameInput.value.trim() !== "" ||
-                emailInput.value.trim() !== "" ||
-                newPasswordInput.value.trim() !== "" ||
-                newPasswordConfirmationInput.value.trim() !== ""
-            );
-
-            confirm.classList.toggle('hidden', !anyFieldsFilled);
+        // Armazena os valores iniciais dos inputs
+        const initialValues = {
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            password: newPasswordInput.value.trim(),
+            passwordConfirmation: newPasswordConfirmationInput.value.trim()
         };
 
-        [nameInput, emailInput, newPasswordInput, newPasswordConfirmationInput].forEach(input => {
-            input.addEventListener('input', validateForm);
-        })
+        const validateForm = () => {
+            // Verifica se algum campo foi alterado em relação ao valor inicial
+            const anyFieldChanged = (
+                nameInput.value.trim() !== initialValues.name ||
+                emailInput.value.trim() !== initialValues.email ||
+                newPasswordInput.value.trim() !== initialValues.password ||
+                newPasswordConfirmationInput.value.trim() !== initialValues.passwordConfirmation
+            );
 
+            // Mostra o botão apenas se algum campo foi alterado
+            confirm.classList.toggle('hidden', !anyFieldChanged);
+        };
+
+        // Adiciona os listeners para detectar mudanças
+        [nameInput, emailInput, newPasswordInput, newPasswordConfirmationInput].forEach(input => {
+            input.addEventListener('input', validateForm); // Valida em tempo real
+            input.addEventListener('change', validateForm); // Valida ao sair do campo
+        });
+
+        // Validação inicial para configurar o estado do botão
         validateForm();
 
         // Validação em tempo real
         currentPasswordInput.addEventListener('input', function() {
             if (this.value.trim() !== "") {
                 passwordReq.classList.add('hidden');
+                nameReq.classList.add('hidden');
+                emailReq.classList.add('hidden');
+                passwordsReq.classList.add('hidden');
                 this.classList.remove('border-red-300', 'ring-2', 'ring-red-200');
                 this.classList.add('border-gray-300');
             }
@@ -215,16 +252,65 @@
 
         // Validação no submit
         form.addEventListener('submit', function(event) {
-            if (currentPasswordInput.value.trim() === "") {
+            let hasError = false;
+
+            // 1. Verifica se a senha atual está vazia quando há alterações
+            const anyFieldChanged = (
+                nameInput.value.trim() !== initialValues.name ||
+                emailInput.value.trim() !== initialValues.email ||
+                newPasswordInput.value.trim() !== '' ||
+                newPasswordConfirmationInput.value.trim() !== ''
+            );
+
+            if (anyFieldChanged && currentPasswordInput.value.trim() === "") {
                 event.preventDefault();
-
-                // Estilização de erro
                 passwordReq.classList.remove('hidden');
-                currentPasswordInput.classList.remove('border-gray-300');
                 currentPasswordInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+                hasError = true;
+            }
 
-                // Foco no campo inválido
-                currentPasswordInput.focus();
+            // 2. Verifica se o nome está vazio
+            if (nameInput.value.trim() === "") {
+                event.preventDefault();
+                nameReq.classList.remove('hidden');
+                nameInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+                hasError = true;
+            }
+
+            // 3. Verifica se o email está vazio
+            if (emailInput.value.trim() === "") {
+                event.preventDefault();
+                emailReq.classList.remove('hidden');
+                emailInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+                hasError = true;
+            }
+
+            // 4. Verifica se a nova senha foi preenchida mas a confirmação não
+            if (newPasswordInput.value.trim() !== "" && newPasswordConfirmationInput.value.trim() === "") {
+                event.preventDefault();
+                passwordsReq.classList.remove('hidden');
+                newPasswordConfirmationInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+                hasError = true;
+            }
+
+            // 5. Verifica se as senhas novas coincidem (apenas se ambas foram preenchidas)
+            if (newPasswordInput.value.trim() !== "" &&
+                newPasswordConfirmationInput.value.trim() !== "" &&
+                newPasswordInput.value !== newPasswordConfirmationInput.value) {
+                event.preventDefault();
+                passwordsReq.textContent = "As senhas não coincidem";
+                passwordsReq.classList.remove('hidden');
+                newPasswordInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+                newPasswordConfirmationInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+                hasError = true;
+            }
+
+            // Foca no primeiro campo com erro
+            if (hasError) {
+                const firstErrorField = document.querySelector('.border-red-300');
+                if (firstErrorField) {
+                    firstErrorField.focus();
+                }
             }
         });
 
