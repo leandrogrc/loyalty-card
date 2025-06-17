@@ -51,8 +51,8 @@
                     </label>
                     <input type="text" id="establishment_name" name="establishment_name" required
                         class="w-full px-3 sm:px-4 py-2 border {{ $errors->has('establishment_name') ? 'border-red-500' : 'border-gray-300' }} rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                        placeholder="Ex: Restaurante Delícia"
-                        value="{{ old('establishment_name', $establishment->establishment_name) }}"
+                        placeholder="{{ old('establishment_name', $establishment->establishment_name) }}"
+
                         maxlength="255">
                     @error('establishment_name')
                     <p class="mt-1 text-xs sm:text-sm text-red-600">{{ $message }}</p>

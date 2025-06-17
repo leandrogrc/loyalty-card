@@ -33,12 +33,70 @@
         </div>
         @endauth
 
+        <!-- Seção de Cliente -->
+        <div class="mb-6 sm:mb-8">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Meus Clientes</h2>
+                <a href="{{ route('clients.create') }}" class="w-full sm:w-auto px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm sm:text-base text-center">
+                    + Adicionar Cliente
+                </a>
+            </div>
+
+            <!-- Grid de Cards -->
+            @if($clients->count() > 0)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                @foreach($clients as $client)
+                <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+                    <div class="p-4 sm:p-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 truncate">{{ $client->name }}</h3>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Ativo</span>
+                        </div>
+
+                        <div class="mt-3 sm:mt-4 space-y-1 sm:space-y-2 text-gray-600 text-sm sm:text-base">
+                            <p class="flex items-center">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                {{ $client->name ?? 'Cidade não informada' }}, {{ $client->name ?? 'UF não informada' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-2 sm:px-6 sm:py-3 bg-gray-50 flex justify-end space-x-1 sm:space-x-2">
+                        <a href="{{ route('clients.index', $client->id) }}" class="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm text-blue-600 hover:text-blue-800">
+                            Detalhes
+                        </a>
+                        <a href="{{ route('clients.edit', $client->id) }}" class="px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm text-gray-600 hover:text-gray-800">
+                            Editar
+                        </a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div class="bg-white rounded-lg shadow p-6 sm:p-8 text-center">
+                <svg class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+                <h3 class="mt-2 text-base sm:text-lg font-medium text-gray-900">Nenhum client</h3>
+                <p class="mt-1 text-gray-500 text-sm sm:text-base">Comece adicionando seu primeiro cliente.</p>
+                <div class="mt-4 sm:mt-6">
+                    <a href="{{ route('clients.create') }}" class="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 border border-transparent rounded-md shadow-sm text-xs sm:text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                        Adicionar Cliente
+                    </a>
+                </div>
+            </div>
+            @endif
+        </div>
+
         <!-- Seção de Estabelecimentos -->
         <div class="mb-6 sm:mb-8">
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-6">
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Meus Estabelecimentos</h2>
                 <a href="{{ route('establishments.create') }}" class="w-full sm:w-auto px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm sm:text-base text-center">
-                    + Adicionar
+                    + Adicionar Estabelecimento
                 </a>
             </div>
 
@@ -90,6 +148,7 @@
             </div>
             @endif
         </div>
+
     </div>
 </div>
 @endsection

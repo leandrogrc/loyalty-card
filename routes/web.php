@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\Client;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EstablishmentController;
 
 
@@ -15,7 +16,8 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $clients = Client::all();
+        return view('dashboard')->with('clients', $clients);
     })->name('dashboard');
 
     // Establishments Views
