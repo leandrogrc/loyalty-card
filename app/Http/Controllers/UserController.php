@@ -93,10 +93,7 @@ class UserController extends Controller
      */
     public function show()
     {
-        // $user = User::with('establishments')->findOrFail($id);
-        $user = User::where(Auth::id());
-        // dd($user);
-        // return response()->json($user, 200);
+        User::where(Auth::id());
         return view('users.show');
     }
 
@@ -111,23 +108,39 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail(Auth::id());
 
-        $data = $request->validate([
-            'name' => 'sometimes|string',
-            'email' => 'sometimes|email|unique:users,email,' . $id,
-            'password' => 'sometimes|string|min:6',
+        // Validação inicial que sempre será executada
+        $validated = $request->validate([
+            'current_password' => 'required|string', // Sempre obrigatório
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|confirmed|min:8', // Nova senha (opcional)
         ]);
 
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
+        // Verificação da senha atual (agora obrigatória para qualquer atualização)
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['error' => 'Senha atual incorreta']);
         }
 
-        $user->update($data);
+        // Remove a senha atual do array de atualização
+        unset($validated['current_password']);
 
-        return response()->json($user, 200);
+        // Se uma nova senha foi fornecida, faz o hash
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            // Remove o campo password se não foi fornecido
+            unset($validated['password']);
+        }
+
+        // Atualiza os dados do usuário
+        $user->update($validated);
+
+        return redirect()->route('users.show')
+            ->with('success', 'Perfil atualizado com sucesso');
     }
 
     /**
