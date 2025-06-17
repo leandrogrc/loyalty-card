@@ -17,6 +17,11 @@ class EstablishmentController extends Controller
 
     public function show(Establishment $establishment)
     {
+        // Verifica se o estabelecimento pertence ao usuário logado
+        if ($establishment->owner_id !== Auth::id()) {
+            abort(403, 'Acesso não autorizado');
+        }
+
         return view('establishments.show')->with('establishment', $establishment);
     }
 
