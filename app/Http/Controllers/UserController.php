@@ -134,7 +134,7 @@ class UserController extends Controller
             }
 
             // Força a atualização de todos os campos
-            $user->fill($validated)->save();
+            $user->update($validated);
 
             return back()->with('success', 'Perfil atualizado com sucesso');
         } catch (\Exception $e) {
