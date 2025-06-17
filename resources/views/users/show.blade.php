@@ -86,18 +86,18 @@
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-800">Informações Pessoais</h3>
                     </div>
-                    <form action="{{ route('users.update')}}" method="POST" class="p-6">
+                    <form action="{{ route('users.update')}}" method="POST" class="p-6" id="profileForm">
                         @csrf
                         @method('PUT')
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
-                                <input type="text" id="name" name="name" value="{{ Auth::user()->name }}"
+                                <input type="text" id="name" name="name" placeholder="{{ Auth::user()->name }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                                <input type="email" id="email" name="email" value="{{ Auth::user()->email }}"
+                                <input type="email" id="email" name="email" placeholder="{{ Auth::user()->email }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             </div>
                         </div>
@@ -106,36 +106,56 @@
                             <h4 class="text-md font-medium text-gray-800 mb-4">Alterar Senha</h4>
                             <div class="space-y-4">
                                 <div>
-                                    <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Senha atual</label>
-                                    <input type="password" name="current_password" id="current_password"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                    <small id="password_req" class="hidden mt-1 text-sm text-red-600 flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                        Informe sua senha atual
-                                    </small>
-                                </div>
-                                <div>
                                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Nova senha</label>
-                                    <input type="password" name="password"
+                                    <input type="password" name="password" placeholder="********"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 <div>
                                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirmar nova senha</label>
-                                    <input type="password" name="password_confirmation"
+                                    <input type="password" name="password_confirmation" placeholder="********"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-8 flex justify-end">
-                            <button type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 mr-3">
-                                Cancelar
-                            </button>
-                            <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                            <button type="button" onclick="openPasswordModal()" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
                                 Salvar alterações
                             </button>
+                        </div>
+
+                        <div id="passwordModal" class="fixed inset-0 bg-gray-600 bg-opacity-70 overflow-y-auto h-full w-full hidden z-50">
+                            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                                <div class="mt-3 text-center">
+                                    <h3 class="text-lg leading-6 font-medium text-gray-900">Confirme sua senha atual</h3>
+                                    <div class="mt-4 px-7 py-3">
+                                        <div>
+                                            <label for="current_password" class="block text-sm font-medium text-gray-700 text-left mb-1">Senha atual</label>
+                                            <input type="password" id="current_password" name="current_password" placeholder="*********"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                            <small id="modal_password_error" class="hidden mt-1 text-sm text-red-600 flex items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                                Senha atual incorreta
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end space-x-3 border-t pt-4">
+                                        <button
+                                            type="button"
+                                            onclick="closePasswordModal()"
+                                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Cancelar
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Confirmar e Salvar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -155,16 +175,6 @@
                                 <input type="checkbox" value="" class="sr-only peer">
                                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                             </label>
-                            <!-- <div class="flex items-center justify-between py-3 border-t border-gray-200">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-800">Notificações por e-mail</p>
-                                    <p class="text-sm text-gray-500">Receba atualizações e notificações importantes</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" value="" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -173,34 +183,46 @@
     </div>
 </div>
 <script>
+    // Funções para o modal de senha
+    function openPasswordModal() {
+        document.getElementById('passwordModal').classList.remove('hidden');
+        document.getElementById('modal_current_password').focus();
+    }
+
+    function closePasswordModal() {
+        document.getElementById('passwordModal').classList.add('hidden');
+        document.getElementById('modal_password_error').classList.add('hidden');
+        document.getElementById('modal_current_password').value = '';
+    }
+
+    function verifyPassword() {
+        const passwordInput = document.getElementById('modal_current_password');
+        const errorElement = document.getElementById('modal_password_error');
+
+        if (passwordInput.value.trim() === "") {
+            errorElement.textContent = "Por favor, informe sua senha atual";
+            errorElement.classList.remove('hidden');
+            passwordInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+            return;
+        }
+
+        // Adiciona a senha digitada no modal ao campo do formulário
+        const formPasswordInput = document.createElement('input');
+        formPasswordInput.type = 'hidden';
+        formPasswordInput.name = 'current_password';
+        formPasswordInput.value = passwordInput.value;
+        document.getElementById('profileForm').appendChild(formPasswordInput);
+
+        // Submete o formulário
+        document.getElementById('profileForm').submit();
+    }
+
+    // Validação do formulário principal
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const currentPasswordInput = document.getElementById('current_password');
-        const passwordReq = document.getElementById('password_req');
+        const form = document.getElementById('profileForm');
 
-        // Validação em tempo real
-        currentPasswordInput.addEventListener('input', function() {
-            if (this.value.trim() !== "") {
-                passwordReq.classList.add('hidden');
-                this.classList.remove('border-red-300', 'ring-2', 'ring-red-200');
-                this.classList.add('border-gray-300');
-            }
-        });
-
-        // Validação no submit
-        form.addEventListener('submit', function(event) {
-            if (currentPasswordInput.value.trim() === "") {
-                event.preventDefault();
-
-                // Estilização de erro
-                passwordReq.classList.remove('hidden');
-                currentPasswordInput.classList.remove('border-gray-300');
-                currentPasswordInput.classList.add('border-red-300', 'ring-2', 'ring-red-200');
-
-                // Foco no campo inválido
-                currentPasswordInput.focus();
-            }
-        });
+        // Validação em tempo real (se necessário)
+        // ...
     });
 </script>
 @endsection
